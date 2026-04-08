@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings | Campus Sakshar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+    body { background:#f4f4f9; color:#333; transition: background 0.3s, color 0.3s; overflow-x:hidden; }
+    body.dark { color:#eaeaea; }
+
+    /* Slideshow */
+    .slideshow { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-2; overflow:hidden; }
+    .slideshow img { width:100%; height:100%; object-fit:cover; position:absolute; opacity:0; animation:fade 20s infinite; }
+    .slideshow img:nth-child(1){ animation-delay:0s; }
+    .slideshow img:nth-child(2){ animation-delay:5s; }
+    .slideshow img:nth-child(3){ animation-delay:10s; }
+    .slideshow img:nth-child(4){ animation-delay:15s; }
+    @keyframes fade { 0%,35%,100%{opacity:0;} 10%,25%{opacity:1;} }
+
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0); z-index:-1; transition: background 0.3s; }
+    body.dark .overlay { background:rgba(0,0,0,0.5); }
+
+    /* Navbar */
+    .navbar { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background:rgba(0,115,230,0.85); color:white; position:sticky; top:0; z-index:1000; }
+    .logo { font-size:1.5rem; font-weight:bold; display:flex; align-items:center; gap:10px; }
+    .logo img { height:50px; width:50px; border-radius:10px; animation:pulse 4s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+
+    .nav-links { display:flex; gap:20px; }
+    .nav-links a { color:white; text-decoration:none; font-weight:500; }
+    .nav-links a:hover { text-decoration:underline; }
+
+    /* Profile Dropdown */
+    .profile { position:relative; display:flex; align-items:center; gap:8px; color:white; cursor:pointer; }
+    .profile img { width:40px; height:40px; border-radius:50%; object-fit:cover; border:2px solid white; transition:transform 0.3s; }
+    .profile img:hover { transform:scale(1.1); }
+    .profile-menu { display:none; position:absolute; top:50px; right:0; background:white; color:#333; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,0.15); min-width:150px; overflow:hidden; z-index:2000; }
+    .profile-menu a { display:block; padding:10px 15px; text-decoration:none; color:#333; }
+    .profile-menu a:hover { background:#f1f1f1; }
+    .profile-menu.active { display:block; }
+
+    /* Settings Section Layout */
+    .main-content {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:60px 20px;
+      min-height:calc(100vh - 120px);
+    }
+
+    .settings-container {
+      background:#fff;
+      padding:30px;
+      border-radius:15px;
+      width:400px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      z-index:10;
+      backdrop-filter:blur(10px);
+    }
+
+    h2 { text-align:center; margin-bottom:20px; }
+
+    section { margin-bottom:25px; }
+    label { display:block; margin:8px 0 4px; font-weight:500; }
+    input {
+      width:100%; padding:8px; border-radius:8px; border:1px solid #ccc;
+      margin-bottom:10px; font-size:14px;
+    }
+    button {
+      width:100%; padding:10px; background:#0078ff; color:#fff;
+      border:none; border-radius:8px; cursor:pointer; font-size:15px;
+      transition:background 0.3s;
+    }
+    button:hover { background:#005fcc; }
+
+    /* Toggle Switch */
+    .switch { position:relative; display:inline-block; width:50px; height:26px; }
+    .switch input { display:none; }
+    .slider { position:absolute; cursor:pointer; background:#ccc; border-radius:26px; top:0; left:0; right:0; bottom:0; transition:0.4s; }
+    .slider:before { content:""; position:absolute; height:20px; width:20px; left:3px; bottom:3px; background:white; border-radius:50%; transition:0.4s; }
+    input:checked + .slider { background:#0078ff; }
+    input:checked + .slider:before { transform:translateX(24px); }
+
+    /* Dark Theme */
+    body.dark { background:#1a1a1a; color:#eee; }
+    body.dark .settings-container { background:#2a2a2a; }
+    body.dark input { background:#444; color:#fff; border:1px solid #666; }
+    body.dark button { background:#005fcc; }
+    body.dark button:hover { background:#0048a0; }
+
+    /* Footer */
+    footer {
+      background:rgba(0,115,230,0.85);
+      color:white; text-align:center; padding:20px;
+    }
+    .footer-links {
+      margin:10px 0;
+      display:flex; justify-content:center; gap:15px; flex-wrap:wrap;
+    }
+    .footer-links a { color:white; font-size:1.2rem; transition:all 0.3s ease; }
+    .footer-links a:hover { transform:scale(1.2); }
+  </style>
+</head>
+<body>
+
+  <!-- Background slideshow -->
+  <div class="slideshow">
+    <img src="https://img.freepik.com/premium-photo/set-blank-colorful-sticky-notes-business-people-meeting-use-post-it-notes-share-idea_661495-8112.jpg" alt="">
+    <img src="https://img.freepik.com/premium-vector/back-school-doodle-style-background-education-hand-drawn-objects-symbols-banner_43029-1963.jpg" alt="">
+    <img src="https://t4.ftcdn.net/jpg/01/31/96/99/360_F_131969925_4npM7jqii8Dlo76mRROdD0r285Oojc8d.jpg" alt="">
+    <img src="https://img.freepik.com/premium-photo/contemporary-learning-workspace-featuring-laptop-textbooks-wireless-mouse-vibrant-blue-desk-generative-ai_262708-31025.jpg" alt="">
+  </div>
+  <div class="overlay"></div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="C:/Users/hp/Desktop/mini project/logo.jpg" alt="Logo">
+      Campus Sakshar
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="view notes.html">View Notes</a>
+      <a href="peer to peer exchange.html">Peer Exchange</a>
+      <a href="about us.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="profile" onclick="toggleProfileMenu()">
+      <img src="https://www.shutterstock.com/shutterstock/photos/1153673752/display_1500/stock-vector-profile-placeholder-image-gray-silhouette-no-photo-1153673752.jpg" alt="">
+      <span>My Profile</span>
+      <div class="profile-menu">
+        <a href="#">View Profile</a>
+        <a href="#">Settings</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Settings Section -->
+  <div class="main-content">
+    <div class="settings-container">
+      <h2>⚙️ Account Settings</h2>
+
+      <section>
+        <h3>Profile Information</h3>
+        <label>Name</label>
+        <input type="text" id="name" placeholder="Enter your name">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email">
+        <button id="saveProfileBtn">Save Changes</button>
+      </section>
+
+      <section>
+        <h3>Change Password</h3>
+        <label>Current Password</label>
+        <input type="password" id="currentPassword" placeholder="Enter current password">
+        <label>New Password</label>
+        <input type="password" id="newPassword" placeholder="Enter new password">
+        <button id="changePasswordBtn">Update Password</button>
+      </section>
+
+      <section>
+        <h3>Theme</h3>
+        <label class="switch">
+          <input type="checkbox" id="themeToggle">
+          <span class="slider"></span>
+        </label>
+        <p>Toggle Dark Mode</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Campus Sakshar | Empowering Students through Knowledge Sharing</p>
+    <div class="footer-links">
+      <a href="#"><i class="fa-solid fa-envelope"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+    </div>
+  </footer>
+
+  <script>
+    // Profile menu toggle
+    function toggleProfileMenu() {
+      document.querySelector(".profile-menu").classList.toggle("active");
+    }
+
+    // Theme toggle
+    const toggle = document.getElementById("themeToggle");
+    toggle.addEventListener("change", () => {
+      document.body.classList.toggle("dark", toggle.checked);
+      localStorage.setItem("theme", toggle.checked ? "dark" : "light");
+    });
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark");
+      toggle.checked = true;
+    }
+
+    // Mock save actions
+    document.getElementById("saveProfileBtn").addEventListener("click", () => {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      if (!name || !email) return alert("Please fill all fields!");
+      alert(`✅ Profile updated successfully!\nName: ${name}\nEmail: ${email}`);
+    });
+
+    document.getElementById("changePasswordBtn").addEventListener("click", () => {
+      const current = document.getElementById("currentPassword").value;
+      const newPass = document.getElementById("newPassword").value;
+      if (!current || !newPass) return alert("Please fill both password fields!");
+      alert("🔒 Password updated successfully!");
+    });
+  </script>
+</body>
+</html>

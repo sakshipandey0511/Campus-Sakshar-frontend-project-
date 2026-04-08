@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peer Exchange - Campus Sakshar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
+    body {background:#f4f4f9; color:#333; transition:background 0.3s, color 0.3s; position:relative; overflow-x:hidden;}
+    body.dark {color:#eaeaea;}
+
+    /* Background Slideshow */
+    .slideshow {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; overflow:hidden;}
+    .slideshow img {width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0; animation:fade 20s infinite;}
+    .slideshow img:nth-child(1){animation-delay:0s;}
+    .slideshow img:nth-child(2){animation-delay:5s;}
+    .slideshow img:nth-child(3){animation-delay:10s;}
+    .slideshow img:nth-child(4){animation-delay:15s;}
+    @keyframes fade {0%{opacity:0;} 10%{opacity:1;} 25%{opacity:1;} 35%{opacity:0;} 100%{opacity:0;}}
+
+    /* Overlay */
+    .overlay {position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0); z-index:-1; transition:background 0.3s;}
+    body.dark .overlay {background:rgba(0,0,0,0.5);}
+
+    /* Navbar */
+    .navbar {display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background:rgba(0,115,230,0.8); color:white; position:sticky; top:0; z-index:1000;}
+    .navbar .logo {font-size:1.5rem; font-weight:bold; display:flex; align-items:center; gap:10px;}
+    .navbar .logo img {height:60px; width:60px; border-radius:10px; animation:pulse 4s infinite;}
+    @keyframes pulse {0%{transform:scale(1);} 50%{transform:scale(1.05);} 100%{transform:scale(1);}}
+
+    .nav-links {display:flex; gap:20px;}
+    .nav-links a {color:white; text-decoration:none; font-weight:500;}
+    .nav-links a:hover {text-decoration:underline;}
+
+    /* Hamburger */
+    .hamburger {display:none; flex-direction:column; cursor:pointer;}
+    .hamburger div {width:25px; height:3px; background:white; margin:4px; transition:0.3s;}
+
+    /* Hero */
+    .hero {text-align:center; padding:50px 20px; text-shadow:2px 2px 6px rgba(0,0,0,0.5);}
+    .hero h1 {font-size:2.5rem; margin-bottom:10px;}
+    .hero p {font-size:1.2rem; color:#222;}
+
+    /* Skill Exchange Section */
+    .skills-section {padding:40px 20px; max-width:1100px; margin:auto;}
+    .skills-section h2 {text-align:center; margin-bottom:20px; color:#0073e6;}
+    .skills-grid {display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:20px;}
+    .skill-card {background:rgba(255,255,255,0.9); border-radius:10px; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,0.1); transition:transform 0.2s, background 0.3s;}
+    .skill-card:hover {transform:scale(1.05); background:rgba(240,248,255,0.95);}
+    body.dark .skill-card {background:rgba(30,30,30,0.85);}
+    .skill-card img {width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:15px;}
+    .skill-card h3 {margin-bottom:5px;}
+    .skill-card p {font-size:0.9rem; margin-bottom:15px;}
+    .skill-card button {background:#0073e6; color:white; border:none; padding:8px 14px; border-radius:5px; cursor:pointer;}
+    .skill-card button:hover {background:#005bb5;}
+
+    /* Post Skill Form */
+    .post-skill {margin-top:50px; text-align:center;}
+    .post-skill h3 {margin-bottom:15px;}
+    .post-skill form {max-width:600px; margin:auto; display:flex; flex-direction:column; gap:15px;}
+    .post-skill input, .post-skill textarea {padding:10px; border-radius:5px; border:1px solid #ccc;}
+    .post-skill button {padding:10px; background:#0073e6; color:white; border:none; border-radius:5px; cursor:pointer;}
+    .post-skill button:hover {background:#005bb5;}
+
+    /* Footer */
+    footer {background:rgba(0,115,230,0.8); color:white; text-align:center; padding:20px; margin-top:50px;}
+    .footer-links {margin-top:10px; display:flex; justify-content:center; gap:15px; flex-wrap:wrap;}
+    .footer-links a {color:white; font-size:1.2rem; transition:all 0.3s;}
+    .footer-links a:hover {transform:scale(1.2);}
+    .fa-facebook:hover{color:#1877f2;} .fa-instagram:hover{color:#e1306c;} .fa-twitter:hover{color:#1da1f2;}
+
+    /* Dark Toggle */
+    .dark-toggle {position:fixed; bottom:20px; right:20px; background:#0073e6; color:white; border:none; padding:12px 15px; border-radius:50%; cursor:pointer; font-size:1.2rem; box-shadow:0 4px 6px rgba(0,0,0,0.2); transition:all 0.3s; z-index:1000;}
+    .dark-toggle:hover {transform:scale(1.1); background:#005bb5;}
+
+    @media(max-width:768px){
+      .nav-links{display:none; flex-direction:column; background:rgba(0,115,230,0.9); position:absolute; top:60px; right:0; width:200px; padding:15px;}
+      .nav-links.active{display:flex;}
+      .hamburger{display:flex;}
+    }
+
+
+     /* Profile Section */
+.profile {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-left:15px;
+  cursor:pointer;
+  color:white;
+  font-weight:500;
+}
+
+.profile img {
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid white;
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile img:hover {
+  transform:scale(1.1);
+  box-shadow:0 0 10px rgba(255,255,255,0.7);
+}
+.profile {
+  position: relative;
+}
+
+.profile-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  min-width: 150px;
+  overflow: hidden;
+  z-index: 2000;
+}
+
+.profile-menu a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.profile-menu a:hover {
+  background: #f1f1f1;
+}
+
+/* Active dropdown */
+.profile-menu.active {
+  display: block;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="slideshow">
+    <img src="https://img.freepik.com/premium-photo/set-blank-colorful-sticky-notes-business-people-meeting-use-post-it-notes-share-idea_661495-8112.jpg?semt=ais_hybrid&w=740&q=80" alt="">
+    <img src="https://img.freepik.com/premium-vector/back-school-doodle-style-background-education-hand-drawn-objects-symbols-banner_43029-1963.jpg" alt="">
+    <img src="https://t4.ftcdn.net/jpg/01/31/96/99/360_F_131969925_4npM7jqii8Dlo76mRROdD0r285Oojc8d.jpg" alt="">
+    <img src="https://img.freepik.com/premium-photo/contemporary-learning-workspace-featuring-laptop-textbooks-wireless-mouse-vibrant-blue-desk-generative-ai_262708-31025.jpg?semt=ais_hybrid&w=740&q=80" alt="">
+  </div>
+  <div class="overlay"></div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="C:\Users\hp\Desktop\mini project\logo.jpg" alt="Logo">
+      Campus Sakshar
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="view notes.html">View Notes</a>
+      <a href="peer-exchange.html">Peer Exchange</a>
+      <a href="about us.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+     <!-- Profile Section -->
+<div class="profile" onclick="toggleProfileMenu()">
+  <img src="https://www.shutterstock.com/shutterstock/photos/1153673752/display_1500/stock-vector-profile-placeholder-image-gray-silhouette-no-photo-1153673752.jpg" alt="Profile">
+  <span>My Profile</span>
+  <!-- Dropdown Menu -->
+  <div class="profile-menu">
+    <a href="#">View Profile</a>
+    <a href="#">Settings</a>
+    <a href="#">Logout</a>
+  </div>
+</div>
+
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Peer-to-Peer Skill Exchange</h1>
+    <p>Connect with peers, share your skills, and learn new ones together!</p>
+  </section>
+
+  <!-- Skill Exchange Cards -->
+  <section class="skills-section">
+    <h2>Available Peers</h2>
+    <div class="skills-grid" id="skillsGrid">
+      <div class="skill-card">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
+        <h3>Anjali Sharma</h3>
+        <p>Skills: Web Development, UI Design</p>
+        <button>Connect</button>
+      </div>
+      <div class="skill-card">
+        <img src="https://randomuser.me/api/portraits/men/31.jpg" alt="User">
+        <h3>Rahul Verma</h3>
+        <p>Skills: Machine Learning, Python</p>
+        <button>Connect</button>
+      </div>
+    </div>
+
+    <!-- Post Skill Form -->
+    <div class="post-skill">
+      <h3>Post Your Skill</h3>
+      <form id="skillForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="text" id="skills" placeholder="Skills (e.g. Python, Design)" required>
+        <textarea id="description" rows="4" placeholder="Describe your expertise and what you want to learn..." required></textarea>
+        <input type="url" id="imageUrl" placeholder="Profile Image URL (optional)">
+        <button type="submit">Post Skill</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Campus Sakshar | Connect. Learn. Grow Together.</p>
+    <div class="footer-links">
+      <a href="#"><i class="fa-solid fa-envelope"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+    </div>
+  </footer>
+
+  <!-- Dark Mode Toggle -->
+  <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+
+  <script>
+    function toggleMenu(){document.querySelector('.nav-links').classList.toggle('active');}
+    function toggleDarkMode(){
+      document.body.classList.toggle('dark');
+      const btn=document.querySelector('.dark-toggle');
+      btn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';
+    }
+
+    // Handle Form Submission
+    document.getElementById('skillForm').addEventListener('submit', function(e){
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const skills = document.getElementById('skills').value.trim();
+      const desc = document.getElementById('description').value.trim();
+      const img = document.getElementById('imageUrl').value.trim() || "https://www.shutterstock.com/shutterstock/photos/1153673752/display_1500/stock-vector-profile-placeholder-image-gray-silhouette-no-photo-1153673752.jpg";
+
+      const grid = document.getElementById('skillsGrid');
+
+      const card = document.createElement('div');
+      card.classList.add('skill-card');
+      card.innerHTML = `
+        <img src="${img}" alt="User">
+        <h3>${name}</h3>
+        <p>Skills: ${skills}</p>
+        <p style="font-size:0.9rem; color:#555;">${desc}</p>
+        <button>Connect</button>
+      `;
+
+      grid.appendChild(card);
+      this.reset();
+      alert("✅ Skill added successfully!");
+    });
+
+
+  // Toggle mobile menu
+  function toggleMenu() {
+    document.querySelector('.nav-links').classList.toggle('active');
+  }
+
+  // Toggle dark mode
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark');
+    const btn = document.querySelector('.dark-toggle');
+    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  }
+
+  // Toggle Profile Dropdown Menu
+  function toggleProfileMenu() {
+    const menu = document.querySelector('.profile-menu');
+    menu.classList.toggle('active');
+  }
+
+  // Close profile menu when clicking outside
+  document.addEventListener('click', function (e) {
+    const profile = document.querySelector('.profile');
+    const menu = document.querySelector('.profile-menu');
+    if (!profile.contains(e.target)) {
+      menu.classList.remove('active');
+    }
+  });
+
+  // Handle Skill Form Submission
+  document.getElementById('skillForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const skills = document.getElementById('skills').value.trim();
+    const desc = document.getElementById('description').value.trim();
+    const img =
+      document.getElementById('imageUrl').value.trim() ||
+      'https://www.shutterstock.com/shutterstock/photos/1153673752/display_1500/stock-vector-profile-placeholder-image-gray-silhouette-no-photo-1153673752.jpg';
+
+    const grid = document.getElementById('skillsGrid');
+
+    const card = document.createElement('div');
+    card.classList.add('skill-card');
+    card.innerHTML = `
+      <img src="${img}" alt="User">
+      <h3>${name}</h3>
+      <p>Skills: ${skills}</p>
+      <p style="font-size:0.9rem; color:#555;">${desc}</p>
+      <button>Connect</button>
+    `;
+
+    grid.appendChild(card);
+    this.reset();
+    alert('✅ Skill added successfully!');
+  });
+
+
+  </script>
+
+</body>
+</html>
